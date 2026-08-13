@@ -46,12 +46,12 @@ export default function Page() {
           </div>
         </div>
 
-        <div className="flex w-full items-start gap-3">
+        <div className="flex w-full items-start justify-between gap-3">
           <div className="pointer-events-auto shrink-0">
             <PlaylistSelector playlistKey={playlistKey} onSelect={setPlaylistKey} vertical />
           </div>
-          <div className="pointer-events-auto w-full max-w-xl min-w-0">
-            <Player playlistKey={playlistKey} />
+          <div className="pointer-events-auto ml-auto w-full max-w-xs min-w-0">
+            <Player playlistKey={playlistKey} compact />
           </div>
         </div>
       </div>

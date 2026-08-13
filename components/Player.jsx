@@ -61,7 +61,7 @@ function Knob({ label, value = 0.5, onChange }) {
   )
 }
 
-export default function Player({ playlistKey }) {
+export default function Player({ playlistKey, compact = false }) {
   const pl = playlists[playlistKey] || playlists.playlistA
   const list = pl.tracks
   const [index, setIndex] = useState(0)
@@ -178,7 +178,7 @@ export default function Player({ playlistKey }) {
         onError={onError}
       />
 
-      <div className={`radio ${playing ? 'radio-on' : ''}`}>
+      <div className={`radio ${compact ? 'radio-compact' : ''} ${playing ? 'radio-on' : ''}`}>
         <div className="radio-header">
           <span className="radio-brand">Nostalgia Radio</span>
           <div className="flex items-center gap-2">

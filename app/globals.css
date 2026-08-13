@@ -328,10 +328,7 @@
 }
 
 @media (min-width: 640px) {
-  .radio {
-    border-radius: 22px;
-    padding: 12px 16px 14px;
-  }
+  .radio { border-radius: 22px; padding: 12px 16px 14px; }
   .radio-brand { font-size: 10px; letter-spacing: 0.26em; }
   .pilot-lamp { width: 9px; height: 9px; }
 
@@ -357,3 +354,27 @@
   .knob { width: 34px; height: 34px; }
   .knob-label { font-size: 8px; letter-spacing: 0.2em; }
 }
+
+/* extra-small radio for the laptop top-right corner */
+.radio-compact { padding: 9px 11px 11px; border-radius: 16px; }
+.radio-compact .radio-header { margin-bottom: 0; }
+.radio-compact .radio-brand { font-size: 8px; letter-spacing: 0.2em; }
+.radio-compact .pilot-lamp { width: 7px; height: 7px; }
+.radio-compact .radio-main { gap: 9px; margin-top: 7px; }
+.radio-compact .dial { padding: 5px 9px 5px; border-radius: 9px; }
+.radio-compact .dial-scale { height: 14px; }
+.radio-compact .dial-labels { font-size: 6.5px; margin-top: 2px; }
+.radio-compact .dial-needle { top: 2px; bottom: 13px; }
+.radio-compact .dial-freq { font-size: 8px; margin-top: 2px; }
+.radio-compact .speaker { width: 58px; height: 58px; flex: 0 0 58px; }
+.radio-compact .speaker .vinyl { width: 44px; height: 44px; flex: 0 0 44px; }
+.radio-compact .radio-track { margin-top: 7px; }
+.radio-compact .radio-meta { gap: 8px; }
+.radio-compact .radio-times { font-size: 8.5px; }
+.radio-compact .radio-seek { height: 18px; margin-top: 2px; }
+.radio-compact .radio-controls { margin-top: 6px; gap: 4px; }
+.radio-compact .radio-transport { gap: 7px; }
+.radio-compact .radio-btn { width: 26px; height: 26px; font-size: 9px; }
+.radio-compact .radio-play { width: 34px; height: 34px; font-size: 12px; }
+.radio-compact .knob { width: 22px; height: 22px; }
+.radio-compact .knob-label { font-size: 6.5px; letter-spacing: 0.12em; }
