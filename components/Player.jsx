@@ -62,7 +62,7 @@ function Knob({ label, value = 0.5, onChange }) {
   )
 }
 
-export default function Player({ playlistKey }) {
+export default function Player({ playlistKey, onPlayingChange }) {
   const pl = playlists[playlistKey] || playlists.playlistA
   const list = pl.tracks
   const [index, setIndex] = useState(() => Math.floor(Math.random() * Math.max(1, list.length)))
@@ -147,8 +147,8 @@ export default function Player({ playlistKey }) {
   }
 
   function onTimeUpdate(e) { setElapsed(e.target.currentTime) }
-  function onPlay() { setPlaying(true); wasPlayingRef.current = true }
-  function onPause() { setPlaying(false) }
+  function onPlay() { setPlaying(true); wasPlayingRef.current = true; onPlayingChange?.(true) }
+  function onPause() { setPlaying(false); onPlayingChange?.(false) }
 
   function onEnded() {
     wasPlayingRef.current = true
@@ -243,7 +243,9 @@ export default function Player({ playlistKey }) {
         </div>
 
         <div className="radio-controls">
-          <Knob label="VOL" value={volume} onChange={onVolumeChange} />
+          <div className="vol-knob">
+            <Knob label="VOL" value={volume} onChange={onVolumeChange} />
+          </div>
           <div className="radio-transport">
             <button type="button" onClick={handlePrev} className="radio-btn" aria-label="Previous or rewind">◀</button>
             <button type="button" onClick={handlePlayPause} className="radio-btn radio-play" aria-label={playing ? 'Pause' : 'Play'}>
@@ -251,7 +253,6 @@ export default function Player({ playlistKey }) {
             </button>
             <button type="button" onClick={handleNext} className="radio-btn" aria-label="Skip">▶</button>
           </div>
-          <Knob label="TUNE" value={dialPct / 100} />
         </div>
       </div>
   )

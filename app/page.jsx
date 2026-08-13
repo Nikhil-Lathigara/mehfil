@@ -7,6 +7,8 @@ import { playlists } from '../lib/tracks'
 
 export default function Page() {
   const [playlistKey, setPlaylistKey] = useState('playlistA')
+  const [playing, setPlaying] = useState(false)
+  const [showPlaylists, setShowPlaylists] = useState(false)
   const active = playlists[playlistKey] || playlists.playlistA
 
   return (
@@ -42,10 +44,26 @@ export default function Page() {
         </div>
 
         <div className="radio-shell">
-          <Player playlistKey={playlistKey} />
+          <Player playlistKey={playlistKey} onPlayingChange={setPlaying} />
         </div>
 
-        <PlaylistSelector playlistKey={playlistKey} onSelect={setPlaylistKey} />
+        <div className="playlist-title" aria-hidden="false">{active.nameHi}</div>
+
+        <div className={`playlist-wrap ${playing ? 'playlist-wrap-playing' : ''} ${playing && !showPlaylists ? 'playlist-wrap-hidden' : ''}`}>
+          <PlaylistSelector playlistKey={playlistKey} onSelect={setPlaylistKey} />
+        </div>
+
+        {playing && (
+          <button
+            type="button"
+            className="playlist-toggle"
+            onClick={() => setShowPlaylists(v => !v)}
+            aria-expanded={showPlaylists}
+            aria-label={showPlaylists ? 'Hide playlists' : 'Show playlists'}
+          >
+            {showPlaylists ? '✕ Close' : '☰ Playlists'}
+          </button>
+        )}
       </div>
     </main>
   )
