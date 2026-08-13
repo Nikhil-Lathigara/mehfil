@@ -65,7 +65,7 @@ function Knob({ label, value = 0.5, onChange }) {
 export default function Player({ playlistKey, onPlayingChange }) {
   const pl = playlists[playlistKey] || playlists.playlistA
   const list = pl.tracks
-  const [index, setIndex] = useState(() => Math.floor(Math.random() * Math.max(1, list.length)))
+  const [index, setIndex] = useState(0)
   const track = list[index] || null
   const audioRef = useRef(null)
   const deckRef = useRef(null)
@@ -191,10 +191,17 @@ export default function Player({ playlistKey, onPlayingChange }) {
     if (audioRef.current) audioRef.current.volume = v
   }
 
+  function onTuneChange(v) {
+    const audio = audioRef.current
+    if (!audio || !duration) return
+    audio.currentTime = v * duration
+    setElapsed(v * duration)
+  }
+
   const pct = duration ? elapsed / duration : 0
   const dialPct = Math.max(0, Math.min(100, pct * 100))
 
-  const radioFace = (
+  const renderRadioFace = (isClone = false) => (
     <div className={`radio ${playing ? 'radio-on' : ''}`}>
         <div className="radio-header">
           <span className="radio-brand">Nostalgia Radio</span>
@@ -236,14 +243,14 @@ export default function Player({ playlistKey, onPlayingChange }) {
               <span>{formatTime(elapsed)} / {formatTime(duration)}</span>
             </div>
           </div>
-          <div className="radio-seek" ref={seekRef} onPointerDown={onSeekDown}>
+          <div className="radio-seek" ref={isClone ? undefined : seekRef} onPointerDown={isClone ? undefined : onSeekDown}>
             <div className="seek-rail" />
             <div className="seek-fill" style={{ width: `${dialPct}%` }} />
           </div>
         </div>
 
         <div className="radio-controls">
-          <div className="vol-knob">
+          <div className="knob-vol">
             <Knob label="VOL" value={volume} onChange={onVolumeChange} />
           </div>
           <div className="radio-transport">
@@ -252,6 +259,9 @@ export default function Player({ playlistKey, onPlayingChange }) {
               {playing ? '❚❚' : '▶'}
             </button>
             <button type="button" onClick={handleNext} className="radio-btn" aria-label="Skip">▶</button>
+          </div>
+          <div className="knob-tune">
+            <Knob label="TUNE" value={pct} onChange={onTuneChange} />
           </div>
         </div>
       </div>
@@ -272,7 +282,7 @@ export default function Player({ playlistKey, onPlayingChange }) {
 
       <div className="player-deck" ref={deckRef} onScroll={handleDeckScroll}>
         <div className="player-panel">
-          {radioFace}
+          {renderRadioFace(false)}
         </div>
 
         <div className="player-panel">
@@ -280,7 +290,7 @@ export default function Player({ playlistKey, onPlayingChange }) {
         </div>
 
         <div className="player-panel player-panel-clone" aria-hidden="true" inert>
-          {radioFace}
+          {renderRadioFace(true)}
         </div>
       </div>
     </div>

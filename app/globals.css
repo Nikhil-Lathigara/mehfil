@@ -122,6 +122,7 @@
     left: 50%;
     transform: translateX(-50%);
     z-index: 30;
+    pointer-events: auto;
     align-items: center;
     gap: 6px;
     padding: 9px 18px;
@@ -183,7 +184,7 @@
 }
 
 .seek-rail { height: 3px; background: rgba(255,255,255,0.15); border-radius: 999px; }
-.seek-fill { height: 3px; background: linear-gradient(90deg, var(--accent), rgba(0,0,0,0.1)); border-radius: 999px; box-shadow: 0 6px 18px -6px var(--accent); }
+.seek-fill { height: 3px; background: var(--accent); border-radius: 999px; box-shadow: 0 6px 18px -6px var(--accent); }
 
 .vinyl-cover {
   width: 100%; height: 100%;
@@ -323,12 +324,14 @@
   margin-top: 6px;
   gap: 6px;
 }
-.radio-controls .vol-knob {
+.radio-controls .knob-vol,
+.radio-controls .knob-tune {
   position: absolute;
-  left: 0;
   top: 50%;
   transform: translateY(-50%);
 }
+.radio-controls .knob-vol { left: 20; }
+.radio-controls .knob-tune { right: 20; }
 .radio-transport { display: flex; align-items: center; justify-content: center; gap: 8px; }
 .radio-btn {
   width: 32px; height: 32px; border-radius: 9999px;
