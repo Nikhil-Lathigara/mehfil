@@ -5,11 +5,13 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "upload:songs": "node scripts/upload-songs.js"
   },
   "dependencies": {
     "@vercel/analytics": "latest",
     "@vercel/speed-insights": "latest",
+    "cloudinary": "^2.10.0",
     "next": "latest",
     "react": "latest",
     "react-dom": "latest"
