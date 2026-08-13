@@ -2,8 +2,8 @@
 
 :root {
   --accent: var(--color-cyan-500);
-  --bg-wide: url('/bg/scene-wide.png');
-  --bg-tall: url('/bg/scene-tall.png');
+  --bg-wide: url('/bg/scene-wide.webp');
+  --bg-tall: url('/bg/scene-tall.webp');
 }
 
 /* viewport-safe padding helpers */
