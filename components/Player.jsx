@@ -65,7 +65,7 @@ function Knob({ label, value = 0.5, onChange }) {
 export default function Player({ playlistKey }) {
   const pl = playlists[playlistKey] || playlists.playlistA
   const list = pl.tracks
-  const [index, setIndex] = useState(0)
+  const [index, setIndex] = useState(() => Math.floor(Math.random() * Math.max(1, list.length)))
   const track = list[index] || null
   const audioRef = useRef(null)
   const deckRef = useRef(null)
@@ -77,7 +77,7 @@ export default function Player({ playlistKey }) {
 
   useEffect(() => {
     wasPlayingRef.current = false
-    setIndex(0)
+    setIndex(Math.floor(Math.random() * Math.max(1, playlists[playlistKey]?.tracks.length || 1)))
   }, [playlistKey])
 
   useEffect(() => {
@@ -122,16 +122,23 @@ export default function Player({ playlistKey }) {
     }
   }
 
+  function randomIndex(current, length) {
+    if (length <= 1) return 0
+    let next = current
+    while (next === current) next = Math.floor(Math.random() * length)
+    return next
+  }
+
   function handlePrev() {
     const audio = audioRef.current
     if (audio && audio.currentTime > 3) { audio.currentTime = 0; return }
-    setIndex(i => Math.max(0, i - 1))
+    setIndex(i => randomIndex(i, list.length))
   }
 
   function handleNext() {
     const audio = audioRef.current
     wasPlayingRef.current = audio ? !audio.paused : wasPlayingRef.current
-    setIndex(i => (i + 1) % list.length)
+    setIndex(i => randomIndex(i, list.length))
   }
 
   function onLoadedMetadata(e) {
@@ -145,13 +152,13 @@ export default function Player({ playlistKey }) {
 
   function onEnded() {
     wasPlayingRef.current = true
-    setIndex(i => (i + 1) % list.length)
+    setIndex(i => randomIndex(i, list.length))
   }
 
   function onError() {
     console.error('audio error', track?.src)
     try { sendAnalytics('audio-error', { src: track?.src }) } catch {}
-    setIndex(i => (i + 1) % list.length)
+    setIndex(i => randomIndex(i, list.length))
   }
 
   const seekRef = useRef(null)
