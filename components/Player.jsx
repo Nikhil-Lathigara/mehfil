@@ -1,6 +1,7 @@
 "use client"
 import { useEffect, useRef, useState } from 'react'
 import { playlists } from '../lib/tracks'
+import TrackList from './TrackList'
 
 function sendAnalytics(name, payload) {
   try {
@@ -61,7 +62,7 @@ function Knob({ label, value = 0.5, onChange }) {
   )
 }
 
-export default function Player({ playlistKey, compact = false }) {
+export default function Player({ playlistKey }) {
   const pl = playlists[playlistKey] || playlists.playlistA
   const list = pl.tracks
   const [index, setIndex] = useState(0)
@@ -74,6 +75,7 @@ export default function Player({ playlistKey, compact = false }) {
   const [volume, setVolume] = useState(0.8)
 
   useEffect(() => {
+    wasPlayingRef.current = false
     setIndex(0)
   }, [playlistKey])
 
@@ -98,6 +100,16 @@ export default function Player({ playlistKey, compact = false }) {
       wasPlayingRef.current = false
       audio.pause()
     }
+  }
+
+  function handlePlayTrack(i) {
+    if (i === index) {
+      wasPlayingRef.current = true
+      audioRef.current?.play().catch(() => {})
+      return
+    }
+    wasPlayingRef.current = true
+    setIndex(i)
   }
 
   function handlePrev() {
@@ -178,7 +190,7 @@ export default function Player({ playlistKey, compact = false }) {
         onError={onError}
       />
 
-      <div className={`radio ${compact ? 'radio-compact' : ''} ${playing ? 'radio-on' : ''}`}>
+      <div className={`radio ${playing ? 'radio-on' : ''}`}>
         <div className="radio-header">
           <span className="radio-brand">Nostalgia Radio</span>
           <div className="flex items-center gap-2">
@@ -237,6 +249,8 @@ export default function Player({ playlistKey, compact = false }) {
           <Knob label="TUNE" value={dialPct / 100} />
         </div>
       </div>
+
+      <TrackList playlistKey={playlistKey} currentIndex={index} onPlayTrack={handlePlayTrack} />
     </div>
   )
 }

@@ -1,12 +1,9 @@
 "use client"
 import { playlists } from '../lib/tracks'
 
-export default function PlaylistSelector({ playlistKey, onSelect, vertical = false }) {
+export default function PlaylistSelector({ playlistKey, onSelect }) {
   return (
-    <nav
-      className={vertical ? 'playlist-strip playlist-rail' : 'playlist-strip'}
-      aria-label="Playlists"
-    >
+    <nav className="playlist-strip" aria-label="Playlists">
       {Object.keys(playlists).map(key => {
         const p = playlists[key]
         const active = key === playlistKey
