@@ -68,6 +68,7 @@ export default function Player({ playlistKey }) {
   const [index, setIndex] = useState(0)
   const track = list[index] || null
   const audioRef = useRef(null)
+  const deckRef = useRef(null)
   const wasPlayingRef = useRef(false)
   const [playing, setPlaying] = useState(false)
   const [duration, setDuration] = useState(track?.duration || 0)
@@ -110,6 +111,15 @@ export default function Player({ playlistKey }) {
     }
     wasPlayingRef.current = true
     setIndex(i)
+  }
+
+  function handleDeckScroll() {
+    const deck = deckRef.current
+    if (!deck) return
+    const max = deck.scrollWidth - deck.clientWidth
+    if (max > 0 && deck.scrollLeft >= max - 1) {
+      deck.scrollLeft = 0
+    }
   }
 
   function handlePrev() {
@@ -177,20 +187,8 @@ export default function Player({ playlistKey }) {
   const pct = duration ? elapsed / duration : 0
   const dialPct = Math.max(0, Math.min(100, pct * 100))
 
-  return (
-    <div>
-      <audio
-        ref={audioRef}
-        preload="metadata"
-        onLoadedMetadata={onLoadedMetadata}
-        onTimeUpdate={onTimeUpdate}
-        onPlay={onPlay}
-        onPause={onPause}
-        onEnded={onEnded}
-        onError={onError}
-      />
-
-      <div className={`radio ${playing ? 'radio-on' : ''}`}>
+  const radioFace = (
+    <div className={`radio ${playing ? 'radio-on' : ''}`}>
         <div className="radio-header">
           <span className="radio-brand">Nostalgia Radio</span>
           <div className="flex items-center gap-2">
@@ -249,8 +247,34 @@ export default function Player({ playlistKey }) {
           <Knob label="TUNE" value={dialPct / 100} />
         </div>
       </div>
+  )
 
-      <TrackList playlistKey={playlistKey} currentIndex={index} onPlayTrack={handlePlayTrack} />
+  return (
+    <div>
+      <audio
+        ref={audioRef}
+        preload="metadata"
+        onLoadedMetadata={onLoadedMetadata}
+        onTimeUpdate={onTimeUpdate}
+        onPlay={onPlay}
+        onPause={onPause}
+        onEnded={onEnded}
+        onError={onError}
+      />
+
+      <div className="player-deck" ref={deckRef} onScroll={handleDeckScroll}>
+        <div className="player-panel">
+          {radioFace}
+        </div>
+
+        <div className="player-panel">
+          <TrackList playlistKey={playlistKey} currentIndex={index} onPlayTrack={handlePlayTrack} />
+        </div>
+
+        <div className="player-panel player-panel-clone" aria-hidden="true" inert>
+          {radioFace}
+        </div>
+      </div>
     </div>
   )
 }

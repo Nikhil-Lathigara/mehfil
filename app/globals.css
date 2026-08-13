@@ -343,6 +343,26 @@
   pointer-events: auto;
 }
 
+/* horizontal radio <-> tracklist deck: swipe right to cycle radio -> tracklist -> radio */
+.player-deck {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+}
+.player-deck::-webkit-scrollbar { display: none; }
+.player-panel {
+  flex: 0 0 100%;
+  min-width: 0;
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+}
+
 @media (min-width: 768px) {
   .radio-shell {
     top: 70px;
@@ -351,6 +371,15 @@
     transform: none;
     width: 320px;
   }
+
+  /* desktop keeps the stacked layout: radio on top, tracklist below */
+  .player-deck {
+    display: block;
+    overflow: visible;
+    scroll-snap-type: none;
+  }
+  .player-panel { flex: none; scroll-snap-align: none; }
+  .player-panel-clone { display: none; }
 
   .playlist-strip {
     top: 72px;
