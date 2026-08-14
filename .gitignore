@@ -5,6 +5,7 @@ node_modules
 .env.*.local
 scripts/uploaded-songs.json
 public/songs/
+public/uploadedSongs/
 dist
 build
 *.log

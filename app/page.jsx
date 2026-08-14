@@ -27,7 +27,7 @@ export default function Page() {
       <div className="grain -z-10" />
 
       <div className="fixed inset-0 z-10 flex flex-col pointer-events-none">
-        <div className="flex items-center justify-between px-4 py-3 pointer-events-auto">
+        {/* <div className="flex items-center justify-between px-4 py-3 pointer-events-auto">
           <div className="safe-left">
             <Clock />
           </div>
@@ -47,7 +47,7 @@ export default function Page() {
               <a className="text-sm text-white/80 hidden sm:inline" href="#" aria-label="instagram">Instagram</a>
             </nav>
           </div>
-        </div>
+        </div> */}
 
         <div className="radio-shell">
           <Player playlistKey={playlistKey} onPlayingChange={setPlaying} />
