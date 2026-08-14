@@ -65,32 +65,33 @@ function Knob({ label, value = 0.5, onChange }) {
 export default function Player({ playlistKey, onPlayingChange }) {
   const pl = playlists[playlistKey] || playlists.playlistA
   const list = pl.tracks
-  const [index, setIndex] = useState(0)
-  const track = list[index] || null
+  const [index, setIndex] = useState(() => Math.floor(Math.random() * Math.max(1, list.length)))
+  const [currentTrack, setCurrentTrack] = useState(() => list[index] || null)
   const audioRef = useRef(null)
   const deckRef = useRef(null)
   const nextAudioRef = useRef(null)
   const wasPlayingRef = useRef(false)
   const [playing, setPlaying] = useState(false)
-  const [duration, setDuration] = useState(track?.duration || 0)
+  const [duration, setDuration] = useState(currentTrack?.duration || 0)
   const [elapsed, setElapsed] = useState(0)
   const [volume, setVolume] = useState(0.8)
+  const track = currentTrack || null
 
   useEffect(() => {
-    wasPlayingRef.current = false
-    setIndex(Math.floor(Math.random() * Math.max(1, playlists[playlistKey]?.tracks.length || 1)))
+    const i = list.findIndex(t => t === currentTrack)
+    setIndex(i)
   }, [playlistKey])
 
   useEffect(() => {
-    if (!track?.src) return
+    if (!currentTrack?.src) return
     const audio = audioRef.current
     if (!audio) return
-    setDuration(track.duration || 0)
+    setDuration(currentTrack.duration || 0)
     setElapsed(0)
-    audio.src = track.src
+    audio.src = currentTrack.src
     audio.load()
     if (wasPlayingRef.current) audio.play().catch(() => {})
-  }, [index, playlistKey])
+  }, [currentTrack])
 
   useEffect(() => {
     const na = nextAudioRef.current
@@ -120,13 +121,14 @@ export default function Player({ playlistKey, onPlayingChange }) {
   }
 
   function handlePlayTrack(i) {
-    if (i === index) {
+    if (i === index && currentTrack) {
       wasPlayingRef.current = true
       audioRef.current?.play().catch(() => {})
       return
     }
     wasPlayingRef.current = true
     setIndex(i)
+    setCurrentTrack(list[i])
   }
 
   function handleDeckScroll() {
@@ -148,13 +150,21 @@ export default function Player({ playlistKey, onPlayingChange }) {
   function handlePrev() {
     const audio = audioRef.current
     if (audio && audio.currentTime > 3) { audio.currentTime = 0; return }
-    setIndex(i => randomIndex(i, list.length))
+    setIndex(i => {
+      const ni = randomIndex(i, list.length)
+      setCurrentTrack(list[ni])
+      return ni
+    })
   }
 
   function handleNext() {
     const audio = audioRef.current
     wasPlayingRef.current = audio ? !audio.paused : wasPlayingRef.current
-    setIndex(i => randomIndex(i, list.length))
+    setIndex(i => {
+      const ni = randomIndex(i, list.length)
+      setCurrentTrack(list[ni])
+      return ni
+    })
   }
 
   function onLoadedMetadata(e) {
@@ -168,13 +178,21 @@ export default function Player({ playlistKey, onPlayingChange }) {
 
   function onEnded() {
     wasPlayingRef.current = true
-    setIndex(i => randomIndex(i, list.length))
+    setIndex(i => {
+      const ni = randomIndex(i, list.length)
+      setCurrentTrack(list[ni])
+      return ni
+    })
   }
 
   function onError() {
     console.error('audio error', track?.src)
     try { sendAnalytics('audio-error', { src: track?.src }) } catch {}
-    setIndex(i => randomIndex(i, list.length))
+    setIndex(i => {
+      const ni = randomIndex(i, list.length)
+      setCurrentTrack(list[ni])
+      return ni
+    })
   }
 
   const seekRef = useRef(null)
