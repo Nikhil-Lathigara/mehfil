@@ -69,6 +69,7 @@ export default function Player({ playlistKey, onPlayingChange }) {
   const track = list[index] || null
   const audioRef = useRef(null)
   const deckRef = useRef(null)
+  const nextAudioRef = useRef(null)
   const wasPlayingRef = useRef(false)
   const [playing, setPlaying] = useState(false)
   const [duration, setDuration] = useState(track?.duration || 0)
@@ -90,6 +91,21 @@ export default function Player({ playlistKey, onPlayingChange }) {
     audio.load()
     if (wasPlayingRef.current) audio.play().catch(() => {})
   }, [index, playlistKey])
+
+  useEffect(() => {
+    const na = nextAudioRef.current
+    if (!na) return
+    if (playing) {
+      const next = list[randomIndex(index, list.length)]?.src
+      if (next && na.getAttribute('src') !== next) {
+        na.setAttribute('src', next)
+        na.load()
+      }
+    } else {
+      na.removeAttribute('src')
+      na.load()
+    }
+  }, [playing, index, playlistKey, list])
 
   function handlePlayPause() {
     const audio = audioRef.current
@@ -279,6 +295,8 @@ export default function Player({ playlistKey, onPlayingChange }) {
         onEnded={onEnded}
         onError={onError}
       />
+
+      <audio ref={nextAudioRef} preload="metadata" className="hidden" />
 
       <div className="player-deck" ref={deckRef} onScroll={handleDeckScroll}>
         <div className="player-panel">

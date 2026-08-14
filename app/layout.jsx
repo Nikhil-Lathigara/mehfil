@@ -8,6 +8,8 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <head />
       <body>
+        <link rel="preload" as="image" href="/bg/scene-wide.webp" />
+        <link rel="preload" as="image" href="/bg/scene-tall.webp" />
         {children}
         <Analytics />
       </body>

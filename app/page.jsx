@@ -1,5 +1,5 @@
 "use client"
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Player from '../components/Player'
 import Clock from '../components/Clock'
 import PlaylistSelector from '../components/PlaylistSelector'
@@ -10,6 +10,12 @@ export default function Page() {
   const [playing, setPlaying] = useState(false)
   const [showPlaylists, setShowPlaylists] = useState(false)
   const active = playlists[playlistKey] || playlists.playlistA
+
+  useEffect(() => {
+    const preload = (src) => { const img = new Image(); img.src = src }
+    if (active?.bg?.wide) preload(active.bg.wide)
+    if (active?.bg?.tall) preload(active.bg.tall)
+  }, [playlistKey])
 
   return (
     <main
