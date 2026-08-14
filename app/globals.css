@@ -71,8 +71,8 @@
   gap: 8px;
   overflow-x: auto;
   overflow-y: hidden;
-  padding: 10px 10px 12px;
-  background: linear-gradient(to bottom, rgba(10,6,3,0.72), rgba(10,6,3,0.9));
+  padding: 5px 5px;
+  background: linear-gradient(to bottom, rgba(255, 194, 148, 0.21), rgba(253, 151, 74, 0.188));
   border: 1px solid rgba(255,255,255,0.16);
   border-radius: 18px;
   backdrop-filter: blur(14px) saturate(1.3);
