@@ -382,7 +382,7 @@
 /* radio shell: top-center on mobile, top-right on desktop */
 .radio-shell {
   position: fixed;
-  top: 58px;
+  top: 30px;
   left: 50%;
   transform: translateX(-50%);
   width: min(100% - 32px, 448px);
@@ -435,14 +435,50 @@
   scroll-snap-stop: always;
 }
 
+/* mobile hint that songs/tracklist are on the right side of the radio */
+.deck-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin: 0 auto 10px;
+  padding: 8px 18px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255,180,90,0.55);
+  background: rgba(20,10,5,0.85);
+  color: #ffc773;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 8px 24px -6px rgba(0,0,0,0.85), inset 0 1px 0 rgba(255,255,255,0.15);
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+}
+.deck-hint:hover { background: rgba(40,20,8,0.9); border-color: rgba(255,180,90,0.8); }
+.deck-hint:active { transform: translateY(1px); }
+.deck-hint-arrow {
+  display: inline-block;
+  color: #ffb54d;
+  animation: hint-nudge 1.6s ease-in-out infinite;
+}
+@keyframes hint-nudge {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(4px); }
+}
+
 @media (min-width: 768px) {
   .radio-shell {
-    top: 70px;
+    top: 50px;
     right: 24px;
     left: auto;
     transform: none;
     width: 320px;
   }
+
+  /* the mobile "Songs →" hint is not needed on desktop (tracklist sits below the radio) */
+  .deck-hint { display: none; }
 
   /* Hindi title at the top center, clear of the top-right radio */
   .playlist-title {
@@ -501,9 +537,9 @@
 
 /* tracklist panel below the radio */
 .tracklist {
-  margin-top: 10px;
+  margin-top: 25px;
   border-radius: 14px;
-  background: rgba(0,0,0,0.45);
+  background: rgba(0, 0, 0, 0.771);
   border: 1px solid rgba(255,255,255,0.12);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);

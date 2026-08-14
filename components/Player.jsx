@@ -69,6 +69,7 @@ export default function Player({ playlistKey, onPlayingChange }) {
   const [currentTrack, setCurrentTrack] = useState(() => list[index] || null)
   const audioRef = useRef(null)
   const deckRef = useRef(null)
+  const tracksPanelRef = useRef(null)
   const nextAudioRef = useRef(null)
   const wasPlayingRef = useRef(false)
   const [playing, setPlaying] = useState(false)
@@ -138,6 +139,13 @@ export default function Player({ playlistKey, onPlayingChange }) {
     if (max > 0 && deck.scrollLeft >= max - 1) {
       deck.scrollLeft = 0
     }
+  }
+
+  function handleGoToTracks() {
+    const deck = deckRef.current
+    const panel = tracksPanelRef.current
+    if (!deck || !panel) return
+    deck.scrollTo({ left: panel.offsetLeft, behavior: 'smooth' })
   }
 
   function randomIndex(current, length) {
@@ -318,10 +326,14 @@ export default function Player({ playlistKey, onPlayingChange }) {
 
       <div className="player-deck" ref={deckRef} onScroll={handleDeckScroll}>
         <div className="player-panel">
+          <button type="button" className="deck-hint" onClick={handleGoToTracks} aria-label="Show songs">
+            <span>Swipe for Songs</span>
+            <span className="deck-hint-arrow">→</span>
+          </button>
           {renderRadioFace(false)}
         </div>
 
-        <div className="player-panel">
+        <div className="player-panel" ref={tracksPanelRef}>
           <TrackList playlistKey={playlistKey} currentIndex={index} onPlayTrack={handlePlayTrack} />
         </div>
 
