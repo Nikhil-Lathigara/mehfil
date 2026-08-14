@@ -79,6 +79,14 @@ export default function Player({ playlistKey, onPlayingChange }) {
   const track = currentTrack || null
 
   useEffect(() => {
+    const audio = audioRef.current
+    const isPlaying = audio ? !audio.paused : false
+    if (!isPlaying) {
+      const i = Math.floor(Math.random() * Math.max(1, list.length))
+      setIndex(i)
+      setCurrentTrack(list[i] || null)
+      return
+    }
     const i = list.findIndex(t => t === currentTrack)
     setIndex(i)
   }, [playlistKey])
